@@ -1,2 +1,5 @@
 # csharp-practice
-Following some C# tutorials and courses
+
+Some C# tutorials and courses.
+
+[Simple Rest API](/SimpleRestApi/) - Barebones weather API following an official tutorial.
