@@ -2,5 +2,5 @@
 
 Some C# tutorials and courses.
 
-[Simple Rest API](/SimpleRestApi/) - Barebones weather API following an official tutorial.
-[NET Core + React course](/NetCoreReactApp/) - Udemy course, building an events app.
+[Simple Rest API](/SimpleRestApi/) - Barebones weather API following an official tutorial.  
+[Events App](/EventsApp/) - Building an app with .NET Core and React, Udemy course.
