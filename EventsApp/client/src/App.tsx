@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import type { Activity } from "./lib/types";
 
 function App() {
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] = useState<Activity[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:5200/api/activities")
