@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import type { Activity } from "./lib/types";
+import { List, ListItem, ListItemText, Typography } from "@mui/material";
 
 function App() {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -12,16 +13,18 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h3 className="app" style={{ color: "red" }}>
+    <>
+      <Typography variant="h3" className="app" style={{ color: "red" }}>
         EventsApp
-      </h3>
-      <ul>
+      </Typography>
+      <List>
         {activities.map((activity) => (
-          <li key={activity.id}>{activity.title}</li>
+          <ListItem key={activity.id}>
+            <ListItemText>{activity.title}</ListItemText>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </>
   );
 }
 
