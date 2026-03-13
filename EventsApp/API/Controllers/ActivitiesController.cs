@@ -7,18 +7,18 @@ using Persistence;
 
 namespace API.Controllers;
 
-public class ActivitiesController(IMediator mediator) : BaseApiController
+public class ActivitiesController() : BaseApiController
 {
   [HttpGet]
   public async Task<ActionResult<List<Activity>>> GetActivities()
   {
     // Decouples the controller from the logic that fetches the activities.
-    return await mediator.Send(new GetActivityList.Query());
+    return await Mediator.Send(new GetActivityList.Query());
   }
 
   [HttpGet("{id}")]
   public async Task<ActionResult<Activity>> GetActivityDetail(string id)
   {
-    return await mediator.Send(new GetActivityDetails.Query{Id = id});
+    return await Mediator.Send(new GetActivityDetails.Query { Id = id });
   }
 }
