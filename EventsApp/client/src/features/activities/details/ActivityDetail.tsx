@@ -11,11 +11,13 @@ import type { Activity } from "../../../lib/types";
 interface ActivityDetailProps {
   activity: Activity;
   cancelSelectActivity: () => void;
+  openForm: (id: string) => void;
 }
 
 export default function ActivityDetail({
   activity,
   cancelSelectActivity,
+  openForm,
 }: ActivityDetailProps) {
   return (
     <Card sx={{ borderRadius: 3 }}>
@@ -31,7 +33,9 @@ export default function ActivityDetail({
         <Typography variant="body1">{activity.description}</Typography>{" "}
       </CardContent>
       <CardActions>
-        <Button color="primary">Edit</Button>
+        <Button color="primary" onClick={() => openForm(activity.id)}>
+          Edit
+        </Button>
         <Button color="inherit" onClick={() => cancelSelectActivity()}>
           Cancel
         </Button>

@@ -2,12 +2,16 @@ import { Grid } from "@mui/material";
 import type { Activity } from "../../../lib/types";
 import { ActivityList } from "./ActivityList";
 import ActivityDetail from "../details/ActivityDetail";
+import ActivityForm from "../form/ActivityForm";
 
 interface ActivityDashboardProps {
   activities: Activity[];
   selectedActivity?: Activity;
   selectActivity: (id: string) => void;
   cancelSelectActivity: () => void;
+  openForm: (id: string) => void;
+  closeForm: () => void;
+  editMode: boolean;
 }
 
 export function ActivityDashboard({
@@ -15,6 +19,9 @@ export function ActivityDashboard({
   selectActivity,
   cancelSelectActivity,
   selectedActivity,
+  openForm,
+  closeForm,
+  editMode,
 }: ActivityDashboardProps) {
   return (
     <Grid container spacing={3}>
@@ -22,12 +29,16 @@ export function ActivityDashboard({
         <ActivityList activities={activities} selectActivity={selectActivity} />
       </Grid>
       <Grid size={5}>
-        {selectedActivity && (
+        {selectedActivity && !editMode && (
           <ActivityDetail
             activity={selectedActivity}
             cancelSelectActivity={cancelSelectActivity}
+            openForm={openForm}
           />
-        )}{" "}
+        )}
+        {editMode && (
+          <ActivityForm closeForm={closeForm} activity={selectedActivity} />
+        )}
       </Grid>
     </Grid>
   );
