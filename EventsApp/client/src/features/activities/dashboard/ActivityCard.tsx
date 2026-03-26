@@ -8,18 +8,19 @@ import {
   Typography,
 } from "@mui/material";
 import type { Activity } from "../../../lib/types";
+import { useActivities } from "../../../lib/hooks/useActivities";
 
 interface ActivityCardProps {
   activity: Activity;
   selectActivity: (id: string) => void;
-  deleteActivity: (id: string) => void;
 }
 
 export default function ActivityCard({
   activity,
   selectActivity,
-  deleteActivity,
 }: ActivityCardProps) {
+  const { deleteActivity } = useActivities();
+
   return (
     <Card sx={{ borderRadius: 3 }}>
       <CardContent>
@@ -46,7 +47,8 @@ export default function ActivityCard({
             size="medium"
             variant="contained"
             color="error"
-            onClick={() => deleteActivity(activity.id)}
+            onClick={() => deleteActivity.mutate(activity.id)}
+            loading={deleteActivity.isPending}
           >
             Delete
           </Button>
