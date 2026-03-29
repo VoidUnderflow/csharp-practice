@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router";
 
 export default function ActivityForm() {
   const navigate = useNavigate();
-  // TODO: Return to prev router location in cancel button onClick.
   const { id } = useParams();
   const { updateActivity, createActivity, activity, isLoadingActivity } =
     useActivities(id);
@@ -36,8 +35,7 @@ export default function ActivityForm() {
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
       <Typography variant="h5" gutterBottom color="primary">
-        {" "}
-        Create activity
+        {activity ? "Edit activity" : "Create activity"}
       </Typography>
       <Box
         component="form"
@@ -72,7 +70,7 @@ export default function ActivityForm() {
         <TextField name="city" label="City" defaultValue={activity?.city} />
         <TextField name="venue" label="Venue" defaultValue={activity?.venue} />
         <Box display={"flex"} justifyContent="end" gap={3}>
-          <Button color="inherit" onClick={() => {}}>
+          <Button color="inherit" onClick={() => navigate("/activities")}>
             Cancel
           </Button>
           <Button
