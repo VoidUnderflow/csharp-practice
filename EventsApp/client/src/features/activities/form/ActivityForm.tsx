@@ -2,12 +2,14 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import type { Activity } from "../../../lib/types";
 import type { FormEvent } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities";
+import { useNavigate, useParams } from "react-router";
 
 export default function ActivityForm() {
-  const { updateActivity, createActivity } = useActivities();
-  // TODO: Need to somehow fetch activity here (route?).
+  const navigate = useNavigate();
   // TODO: Return to prev router location in cancel button onClick.
-  const activity = {} as Activity;
+  const { id } = useParams();
+  const { updateActivity, createActivity, activity, isLoadingActivity } =
+    useActivities(id);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,11 +22,16 @@ export default function ActivityForm() {
 
     if (activity) {
       data.id = activity.id;
-      await updateActivity.mutateAsync(data as unknown as Activity);
+      await updateActivity.mutateAsync(data as unknown as Activity, {
+        onSuccess: (id) => navigate(`/activities/${id}`),
+      });
+      navigate(`/activities/${activity.id}`);
     } else {
       await createActivity.mutateAsync(data as unknown as Activity);
     }
   };
+
+  if (isLoadingActivity) return <Typography>Loading activity...</Typography>;
 
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
