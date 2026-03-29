@@ -9,12 +9,11 @@ import {
 } from "@mui/material";
 import type { Activity } from "../../../lib/types";
 import { useActivities } from "../../../lib/hooks/useActivities";
+import { Link } from "react-router";
 
 interface ActivityCardProps {
   activity: Activity;
 }
-
-// TODO: Replace {} with routing to a specific activity.
 
 export default function ActivityCard({ activity }: ActivityCardProps) {
   const { deleteActivity } = useActivities();
@@ -34,7 +33,13 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
       >
         <Chip label={activity.category} variant="outlined" />
         <Box display={"flex"} gap={2}>
-          <Button size="medium" variant="contained" onClick={() => {}}>
+          <Button
+            component={Link}
+            to={`/activities/${activity.id}`}
+            size="medium"
+            variant="contained"
+            onClick={() => {}}
+          >
             View
           </Button>
           <Button
