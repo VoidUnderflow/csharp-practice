@@ -1,7 +1,6 @@
 import {
   AppBar,
   Box,
-  Button,
   Container,
   MenuItem,
   Toolbar,
@@ -9,8 +8,7 @@ import {
 } from "@mui/material";
 
 import { Group } from "@mui/icons-material";
-
-// TODO: On click => go to form page.
+import MenuItemLink from "../shared/components/MenuItemLink";
 
 export default function NavBar() {
   return (
@@ -19,52 +17,18 @@ export default function NavBar() {
         <Container maxWidth="xl">
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <MenuItem
-                sx={{ display: "flex", justifyContent: "space-between" }}
-              >
+              <MenuItemLink to="/">
                 <Group fontSize="large" />
                 <Typography variant="h4" fontWeight="bold">
                   Activities app
                 </Typography>
-              </MenuItem>
+              </MenuItemLink>
             </Box>
             <Box sx={{ display: "flex" }}>
-              <MenuItem
-                sx={{
-                  fontSize: "1.2rem",
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
-                }}
-              >
-                Activities
-              </MenuItem>
-              <MenuItem
-                sx={{
-                  fontSize: "1.2rem",
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
-                }}
-              >
-                About
-              </MenuItem>
-              <MenuItem
-                sx={{
-                  fontSize: "1.2rem",
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
-                }}
-              >
-                Contact
-              </MenuItem>
+              <MenuItemLink to="/activities">Activities</MenuItemLink>
+              <MenuItemLink to="/createActivity">Create Activity</MenuItemLink>
             </Box>
-            <Button
-              size="large"
-              variant="contained"
-              color="warning"
-              onClick={() => {}}
-            >
-              Create activity
-            </Button>
+            <MenuItem>User menu placeholder</MenuItem>
           </Toolbar>
         </Container>
       </AppBar>
