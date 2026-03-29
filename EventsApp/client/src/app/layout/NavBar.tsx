@@ -10,11 +10,9 @@ import {
 
 import { Group } from "@mui/icons-material";
 
-interface NavBarProps {
-  openForm: () => void;
-}
+// TODO: On click => go to form page.
 
-export default function NavBar({ openForm }: NavBarProps) {
+export default function NavBar() {
   return (
     <Box>
       <AppBar position="static" sx={{ backgroundColor: "#4527a0" }}>
@@ -63,7 +61,7 @@ export default function NavBar({ openForm }: NavBarProps) {
               size="large"
               variant="contained"
               color="warning"
-              onClick={() => openForm()}
+              onClick={() => {}}
             >
               Create activity
             </Button>

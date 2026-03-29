@@ -3,16 +3,11 @@ import type { Activity } from "../../../lib/types";
 import type { FormEvent } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities";
 
-interface ActivityFormProps {
-  activity?: Activity;
-  closeForm: () => void;
-}
-
-export default function ActivityForm({
-  activity,
-  closeForm,
-}: ActivityFormProps) {
+export default function ActivityForm() {
   const { updateActivity, createActivity } = useActivities();
+  // TODO: Need to somehow fetch activity here (route?).
+  // TODO: Return to prev router location in cancel button onClick.
+  const activity = {} as Activity;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,8 +24,6 @@ export default function ActivityForm({
     } else {
       await createActivity.mutateAsync(data as unknown as Activity);
     }
-
-    closeForm();
   };
 
   return (
@@ -72,7 +65,7 @@ export default function ActivityForm({
         <TextField name="city" label="City" defaultValue={activity?.city} />
         <TextField name="venue" label="Venue" defaultValue={activity?.venue} />
         <Box display={"flex"} justifyContent="end" gap={3}>
-          <Button color="inherit" onClick={() => closeForm()}>
+          <Button color="inherit" onClick={() => {}}>
             Cancel
           </Button>
           <Button
