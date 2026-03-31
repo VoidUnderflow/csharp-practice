@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Card,
-  CardActions,
   CardContent,
   CardHeader,
   Chip,
@@ -11,7 +10,6 @@ import {
   Typography,
 } from "@mui/material";
 import type { Activity } from "../../../lib/types";
-import { useActivities } from "../../../lib/hooks/useActivities";
 import { Link } from "react-router";
 import { AccessTime, Place } from "@mui/icons-material";
 
@@ -25,7 +23,6 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
   const label = isHost ? "You are hosting" : "You are going";
   const isCancelled = false;
   const color = isHost ? "secondary" : isGoing ? "warning" : "default";
-  const { deleteActivity } = useActivities();
 
   return (
     <Card elevation={3} sx={{ borderRadius: 3 }}>
