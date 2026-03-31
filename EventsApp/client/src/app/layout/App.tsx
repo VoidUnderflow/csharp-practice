@@ -1,6 +1,7 @@
 import { Box, Container, CssBaseline } from "@mui/material";
 import NavBar from "./NavBar";
 import { Outlet } from "react-router";
+import "./styles.css";
 
 function App() {
   return (
