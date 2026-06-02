@@ -2,7 +2,7 @@ import { makeObservable, observable } from "mobx";
 
 export default class CounterStore {
   title = "Counter store";
-  count = 0;
+  count = 42;
 
   constructor() {
     makeObservable(this, {
@@ -10,4 +10,12 @@ export default class CounterStore {
       count: observable,
     });
   }
+
+  increment = (amount: number = 1) => {
+    this.count += amount;
+  };
+
+  decrement = (amount: number = 1) => {
+    this.count -= amount;
+  };
 }
