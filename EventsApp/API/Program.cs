@@ -1,3 +1,4 @@
+using API.Middleware;
 using Application.Activities.Commands;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
@@ -29,8 +30,11 @@ builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfiles>());
 // Validators used by API endpoints.
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 
+// Exception handling middleware.
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(options =>
   options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173", "https://localhost:5173"));
 
