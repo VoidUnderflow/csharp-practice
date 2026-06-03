@@ -1,5 +1,8 @@
+using Application.Activities.Commands;
 using Application.Activities.Queries;
+using Application.Activities.Validators;
 using Application.Core;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -14,10 +17,18 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 builder.Services.AddCors();
 
 // Since mediator is injected into the ActivitiesController => need to add it as a service here.
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
+builder.Services.AddMediatR(x =>
+{
+  x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>();
+  x.AddOpenBehavior(typeof(ValidationBehavior<,>));
+});
 
 // Add auto-mapper.
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfiles>());
+
+// Validators used by API endpoints.
+builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
+
 
 var app = builder.Build();
 app.UseCors(options =>
