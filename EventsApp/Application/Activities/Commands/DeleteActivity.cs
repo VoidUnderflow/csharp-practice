@@ -29,5 +29,4 @@ public class DeleteActivity
             return Result<Unit>.Success(Unit.Value);
         }
     }
-
 }
