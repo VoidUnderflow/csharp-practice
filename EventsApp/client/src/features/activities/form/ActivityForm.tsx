@@ -3,9 +3,22 @@ import { useEffect } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities";
 import { useParams } from "react-router";
 import { useForm, type FieldValues } from "react-hook-form";
+import {
+  activitySchema,
+  type ActivitySchema,
+} from "../../../lib/schemas/activitySchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function ActivityForm() {
-  const { register, reset, handleSubmit } = useForm();
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ActivitySchema>({
+    mode: "onTouched",
+    resolver: zodResolver(activitySchema),
+  });
   const { id } = useParams();
   const { updateActivity, createActivity, activity, isLoadingActivity } =
     useActivities(id);
@@ -37,6 +50,8 @@ export default function ActivityForm() {
           name="title"
           label="Title"
           defaultValue={activity?.title}
+          error={!!errors.title}
+          helperText={errors.title?.message}
         />
         <TextField
           {...register("description")}
