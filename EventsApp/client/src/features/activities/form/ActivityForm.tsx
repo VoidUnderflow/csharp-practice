@@ -63,6 +63,7 @@ export default function ActivityForm() {
           items={categoryOptions}
           control={control}
           name="category"
+          defaultValue={categoryOptions[0]!.value}
         />
         <DateTimeInput label="Date" control={control} name="date" />
         <TextInput label="City" control={control} name="city" />
