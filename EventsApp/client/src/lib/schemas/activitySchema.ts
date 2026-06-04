@@ -9,9 +9,7 @@ export const activitySchema = z.object({
   title: requiredString("Title"),
   description: requiredString("Description"),
   category: requiredString("Category"),
-  date: z.coerce.date({
-    error: "Date is required",
-  }),
+  date: z.date({ error: "Date is required" }),
   city: requiredString("City"),
   venue: requiredString("Venue"),
 });
