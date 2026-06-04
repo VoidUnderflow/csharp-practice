@@ -9,6 +9,8 @@ import {
 } from "../../../lib/schemas/activitySchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "../../../app/shared/components/TextInput";
+import SelectInput from "../../../app/shared/components/SelectInput";
+import { categoryOptions } from "./categoryOptions";
 
 export default function ActivityForm() {
   const {
@@ -55,7 +57,12 @@ export default function ActivityForm() {
           rows={3}
         />
 
-        <TextInput label="Category" control={control} name="category" />
+        <SelectInput
+          label="Category"
+          items={categoryOptions}
+          control={control}
+          name="category"
+        />
         <TextInput label="Date" control={control} name="date" />
         <TextInput label="City" control={control} name="city" />
         <TextInput label="Venue" control={control} name="venue" />
