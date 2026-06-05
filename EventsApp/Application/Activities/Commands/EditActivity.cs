@@ -27,7 +27,7 @@ public class EditActivity
             await context.SaveChangesAsync(cancellationToken);
 
             var result = await context.SaveChangesAsync(cancellationToken) > 0;
-            if (!result) return Result<Unit>.Failure("Failed to delete the activity", 400);
+            if (!result) return Result<Unit>.Failure("Failed to edit the activity", 400);
             return Result<Unit>.Success(Unit.Value);
         }
     }

@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useForm, type FieldValues } from "react-hook-form";
 import {
   activitySchema,
@@ -27,13 +27,42 @@ export default function ActivityForm() {
   const { id } = useParams();
   const { updateActivity, createActivity, activity, isLoadingActivity } =
     useActivities(id);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (activity) reset(activity);
+    if (activity)
+      reset({
+        ...activity,
+        location: {
+          city: activity.city,
+          venue: activity.venue,
+          latitude: activity.latitude,
+          longitude: activity.longitude,
+        },
+      });
   }, [activity, reset]);
 
   const onSubmit = async (data: FieldValues) => {
-    console.log("Placeholder, form submitted.");
+    const { location, ...rest } = data;
+    const flattenedData = { ...location, ...rest };
+    console.log(flattenedData);
+
+    try {
+      if (activity) {
+        updateActivity.mutate(
+          { ...activity, ...flattenedData },
+          {
+            onSuccess: () => navigate(`/activities/${activity.id}`),
+          },
+        );
+      } else {
+        createActivity.mutate(flattenedData, {
+          onSuccess: (id) => navigate(`/activities/${id}`),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (isLoadingActivity) return <Typography>Loading activity...</Typography>;
@@ -59,14 +88,17 @@ export default function ActivityForm() {
           rows={3}
         />
 
-        <SelectInput
-          label="Category"
-          items={categoryOptions}
-          control={control}
-          name="category"
-          defaultValue={categoryOptions[0]!.value}
-        />
-        <DateTimeInput label="Date" control={control} name="date" />
+        <Box display={"flex"} gap={3}>
+          <SelectInput
+            label="Category"
+            items={categoryOptions}
+            control={control}
+            name="category"
+            defaultValue={categoryOptions[0]!.value}
+          />
+          <DateTimeInput label="Date" control={control} name="date" />
+        </Box>
+
         <LocationInput
           control={control}
           label="Enter the location"
