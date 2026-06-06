@@ -54,7 +54,11 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(options =>
-  options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173", "https://localhost:5173"));
+  options
+  .AllowAnyHeader()
+  .AllowAnyMethod()
+  .AllowCredentials()
+  .WithOrigins("http://localhost:5173", "https://localhost:5173"));
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapGroup("api").MapIdentityApi<User>();
