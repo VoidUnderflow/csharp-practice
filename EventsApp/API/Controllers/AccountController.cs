@@ -30,4 +30,29 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
 
         return ValidationProblem();
     }
+
+    [HttpGet("user-info")]
+    [AllowAnonymous]
+    public async Task<ActionResult> GetUserInfo()
+    {
+        if (User.Identity?.IsAuthenticated == false) return NoContent();
+
+        var user = await signInManager.UserManager.GetUserAsync(User);
+        if (user == null) return Unauthorized();
+
+        return Ok(new
+        {
+            user.DisplayName,
+            user.Email,
+            user.Id,
+            user.ImageUrl
+        });
+    }
+
+    [HttpPost("logout")]
+    public async Task<ActionResult> LogOut()
+    {
+        await signInManager.SignOutAsync(); // also removes the cookie
+        return NoContent();
+    }
 }
