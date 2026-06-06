@@ -3,7 +3,9 @@ using Application.Activities.Commands;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
 using Application.Core;
+using Domain;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -33,10 +35,23 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 // Exception handling middleware.
 builder.Services.AddTransient<ExceptionMiddleware>();
 
+// Identity.
+builder.Services.AddIdentityApiEndpoints<User>(opt =>
+{
+  opt.User.RequireUniqueEmail = true;
+
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<AppDbContext>();
+
+// Register middleware.
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(options =>
   options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173", "https://localhost:5173"));
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapGroup("api").MapIdentityApi<User>();
 
 // Configure the HTTP request pipeline.
 app.MapControllers();
