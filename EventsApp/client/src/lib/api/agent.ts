@@ -11,6 +11,7 @@ function sleep(delay: number) {
 
 export const agent = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
 });
 
 agent.interceptors.response.use((config) => {
