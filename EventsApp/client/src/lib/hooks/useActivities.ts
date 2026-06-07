@@ -10,9 +10,7 @@ export function useActivities(id?: string) {
   const { data: activities, isPending } = useQuery({
     queryKey: ["activities"],
     queryFn: async () => {
-      const response = await agent.get<Activity[]>(
-        "http://localhost:5200/api/activities",
-      );
+      const response = await agent.get<Activity[]>("/activities");
       return response.data;
     },
     enabled: !id && location.pathname === "/activities",
