@@ -15,6 +15,7 @@ export default function RegisterForm() {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { isValid, isSubmitting },
   } = useForm<RegisterSchema>({
     mode: "onTouched",
@@ -22,7 +23,18 @@ export default function RegisterForm() {
   });
 
   const onSubmit = async (data: RegisterSchema) => {
-    await registerUser.mutateAsync(data);
+    await registerUser.mutateAsync(data, {
+      onError: (errors) => {
+        if (Array.isArray(errors)) {
+          errors.forEach((error: string) => {
+            if (error.includes("Email")) setError("email", { message: error });
+            else if (error.includes("Password"))
+              setError("password", { message: error });
+            else setError("displayName", { message: error });
+          });
+        }
+      },
+    });
   };
 
   return (
