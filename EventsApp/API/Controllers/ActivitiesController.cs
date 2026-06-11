@@ -9,7 +9,7 @@ namespace API.Controllers;
 public class ActivitiesController() : BaseApiController
 {
   [HttpGet]
-  public async Task<ActionResult<List<Activity>>> GetActivities()
+  public async Task<ActionResult<List<ActivityDto>>> GetActivities()
   {
     // Decouples the controller from the logic that fetches the activities.
     return await Mediator.Send(new GetActivityList.Query());
