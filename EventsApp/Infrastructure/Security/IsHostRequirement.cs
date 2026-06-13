@@ -28,10 +28,13 @@ public class IsHostRequirementHandler(
         var httpContext = httpContextAccessor.HttpContext;
         if (httpContext?.GetRouteValue("id") is not string activityId) return;
 
-        var attendee = await dbContext.ActivityAttendees.SingleOrDefaultAsync(
-            activityAttendee => activityAttendee.UserId == userId &&
-                                activityAttendee.ActivityId == activityId
-        );
+        // No tracking prevents attendees being wiped by the mapper in EditActivity.
+        var attendee = await dbContext.ActivityAttendees
+            .AsNoTracking()
+            .SingleOrDefaultAsync(
+                activityAttendee => activityAttendee.UserId == userId &&
+                                    activityAttendee.ActivityId == activityId
+            );
         if (attendee == null) return;
         if (attendee.IsHost) context.Succeed(requirement);
     }
