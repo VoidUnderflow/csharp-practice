@@ -4,7 +4,7 @@ using Domain;
 using Microsoft.AspNetCore.Http;
 using Persistence;
 
-namespace Infrastructure;
+namespace Infrastructure.Security;
 
 public class UserAccessor(IHttpContextAccessor httpContextAccesor, AppDbContext dbContext) : IUserAccessor
 {
