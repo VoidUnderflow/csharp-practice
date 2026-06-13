@@ -1,5 +1,4 @@
 using API.Middleware;
-using Application.Activities.Commands;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
 using Application.Core;
@@ -54,6 +53,16 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>();
+
+// Authorization (e.g: editing activities).
+builder.Services.AddAuthorization(opt =>
+{
+  opt.AddPolicy("IsActivityHost", policy =>
+  {
+    policy.Requirements.Add(new IsHostRequirement());
+  });
+});
+builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
 // Register middleware.
 var app = builder.Build();

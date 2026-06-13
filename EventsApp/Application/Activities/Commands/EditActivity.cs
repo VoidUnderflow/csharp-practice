@@ -1,7 +1,6 @@
 using Application.Activities.DTOs;
 using Application.Core;
 using AutoMapper;
-using Domain;
 using MediatR;
 using Persistence;
 
@@ -23,8 +22,6 @@ public class EditActivity
             if (activity == null) return Result<Unit>.Failure("Activity not found", 404);
 
             mapper.Map(request.ActivityDto, activity);
-
-            await context.SaveChangesAsync(cancellationToken);
 
             var result = await context.SaveChangesAsync(cancellationToken) > 0;
             if (!result) return Result<Unit>.Failure("Failed to edit the activity", 400);
