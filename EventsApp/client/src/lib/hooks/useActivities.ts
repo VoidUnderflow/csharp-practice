@@ -11,11 +11,13 @@ export function useActivities(id?: string) {
 
   const { data: activities, isLoading } = useQuery({
     queryKey: ["activities"],
+    enabled: !id && location.pathname === "/activities" && !!currentUser,
+
     queryFn: async () => {
       const response = await agent.get<Activity[]>("/activities");
       return response.data;
     },
-    enabled: !id && location.pathname === "/activities" && !!currentUser,
+
     select: (data) => {
       return data.map((activity) => {
         return {
@@ -31,11 +33,13 @@ export function useActivities(id?: string) {
 
   const { data: activity, isLoading: isLoadingActivity } = useQuery({
     queryKey: ["activities", id],
+    enabled: !!id && !!currentUser, // this query executes only if id was provided
+
     queryFn: async () => {
       const response = await agent.get<Activity>(`/activities/${id}`);
       return response.data;
     },
-    enabled: !!id && !!currentUser, // this query executes only if id was provided
+
     select: (data) => {
       return {
         ...data,
@@ -51,6 +55,7 @@ export function useActivities(id?: string) {
     mutationFn: async (activity: Activity) => {
       await agent.put("/activities", activity);
     },
+
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["activities"],
@@ -63,6 +68,7 @@ export function useActivities(id?: string) {
       const response = agent.post("/activities", activity);
       return (await response).data;
     },
+
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["activities"],
@@ -74,6 +80,7 @@ export function useActivities(id?: string) {
     mutationFn: async (id: string) => {
       await agent.delete(`/activities/${id}`);
     },
+
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["activities"],
@@ -85,10 +92,55 @@ export function useActivities(id?: string) {
     mutationFn: async (id: string) => {
       await agent.post(`/activities/${id}/attend`);
     },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["activities", id],
+
+    onMutate: async (id: string) => {
+      await queryClient.cancelQueries({ queryKey: ["activities", id] });
+
+      // Get a copy of the old activity, to rollback to if needed.
+      const prevActivity = queryClient.getQueryData<Activity>([
+        "activities",
+        id,
+      ]);
+
+      // Update attendance (imo, this should be its own function someplace else because
+      // this logic repeats itself in multiple places; alas...).
+      queryClient.setQueryData<Activity>(["activities", id], (oldActivity) => {
+        if (!oldActivity || !currentUser) return oldActivity;
+
+        const isHost = oldActivity.hostId === currentUser.id;
+        const isAttending = oldActivity.attendees.some(
+          (attendee) => attendee.id === currentUser.id,
+        );
+
+        return {
+          ...oldActivity,
+          isCancelled: isHost
+            ? !oldActivity.isCancelled
+            : oldActivity.isCancelled,
+          attendees: isAttending
+            ? isHost
+              ? oldActivity.attendees
+              : oldActivity.attendees.filter(
+                  (attendee) => attendee.id !== currentUser.id,
+                )
+            : [
+                ...oldActivity.attendees,
+                {
+                  id: currentUser.id,
+                  displayName: currentUser.displayName,
+                  imageUrl: currentUser.imageUrl,
+                },
+              ],
+        };
       });
+
+      return { prevActivity };
+    },
+
+    onError: (error, id, context) => {
+      console.log(error);
+      if (context?.prevActivity)
+        queryClient.setQueryData(["activities", id], context.prevActivity);
     },
   });
 
