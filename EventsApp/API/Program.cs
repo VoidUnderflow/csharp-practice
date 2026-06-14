@@ -37,6 +37,9 @@ builder.Services.AddMediatR(x =>
 // Interface Application uses to access Users
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 
+// Cloudinary image uploader / URL fetcher.
+builder.Services.AddScoped<IPhotoService, PhotoService>();
+
 // Add auto-mapper.
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfiles>());
 
