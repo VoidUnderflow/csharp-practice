@@ -135,3 +135,6 @@ _NCrunch*
 reactivities.db*
 
 .env
+
+# contains Cloudinary key
+appsettings.json
