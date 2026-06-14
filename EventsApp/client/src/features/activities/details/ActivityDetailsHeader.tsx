@@ -2,6 +2,7 @@ import { Badge, Box, Button, Card, CardMedia, Typography } from "@mui/material";
 import { Link } from "react-router";
 import type { Activity } from "../../../lib/types";
 import { formatDate } from "../../../lib/util/util";
+import { useActivities } from "../../../lib/hooks/useActivities";
 
 interface ActivityDetailsHeaderProps {
   activity: Activity;
@@ -10,7 +11,7 @@ interface ActivityDetailsHeaderProps {
 export default function ActivityDetailsHeader({
   activity,
 }: ActivityDetailsHeaderProps) {
-  const loading = false;
+  const { updateAttendance } = useActivities(activity.id);
 
   return (
     <Card
@@ -76,7 +77,8 @@ export default function ActivityDetailsHeader({
               <Button
                 variant="contained"
                 color={activity.isCancelled ? "success" : "error"}
-                onClick={() => {}}
+                onClick={() => updateAttendance.mutate(activity.id)}
+                disabled={updateAttendance.isPending}
               >
                 {activity.isCancelled
                   ? "Re-activate Activity"
@@ -93,12 +95,11 @@ export default function ActivityDetailsHeader({
               </Button>
             </>
           ) : (
-            // Updated disabled (loading is a placeholder).
             <Button
               variant="contained"
               color={activity.isGoing ? "primary" : "info"}
-              onClick={() => {}}
-              disabled={loading}
+              onClick={() => updateAttendance.mutate(activity.id)}
+              disabled={updateAttendance.isPending || activity.isCancelled}
             >
               {activity.isGoing ? "Cancel Attendance" : "Join Activity"}
             </Button>
