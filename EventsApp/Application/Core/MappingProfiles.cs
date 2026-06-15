@@ -12,6 +12,7 @@ public class MappingProfiles : Profile
         CreateMap<Activity, Activity>();
         CreateMap<CreateActivityDto, Activity>();
         CreateMap<EditActivityDto, Activity>();
+
         CreateMap<Activity, ActivityDto>()
             .ForMember(
                 activityDto => activityDto.HostDisplayName,
@@ -25,10 +26,13 @@ public class MappingProfiles : Profile
                     activity => activity.Attendees.FirstOrDefault(attendee => attendee.IsHost)!.User.Id
                 )
             );
+
         CreateMap<ActivityAttendee, UserProfile>()
             .ForMember(userProfile => userProfile.DisplayName, memberOptions => memberOptions.MapFrom(activityAttendee => activityAttendee.User.DisplayName))
             .ForMember(userProfile => userProfile.Bio, memberOptions => memberOptions.MapFrom(activityAttendee => activityAttendee.User.Bio))
             .ForMember(userProfile => userProfile.ImageUrl, memberOptions => memberOptions.MapFrom(activityAttendee => activityAttendee.User.ImageUrl))
             .ForMember(userProfile => userProfile.Id, memberOptions => memberOptions.MapFrom(activityAttendee => activityAttendee.User.Id));
+
+        CreateMap<User, UserProfile>();
     }
 }
