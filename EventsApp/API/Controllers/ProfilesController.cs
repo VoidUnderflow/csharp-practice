@@ -18,4 +18,11 @@ public class ProfilesController : BaseApiController
     {
         return HandleResult(await Mediator.Send(new GetProfilePhotos.Query { UserId = userId }));
     }
+
+    // This API route makes absolutely no sense.
+    [HttpDelete("{photoId}/photos")]
+    public async Task<ActionResult> DeletePhoto(string photoId)
+    {
+        return HandleResult(await Mediator.Send(new DeletePhoto.Command { PhotoId = photoId }));
+    }
 }
