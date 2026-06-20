@@ -35,7 +35,10 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
         justifyContent={"space-between"}
       >
         <CardHeader
-          avatar=<Avatar sx={{ height: 80, width: 80 }} />
+          avatar=<Avatar
+            src={activity.hostImageUrl}
+            sx={{ height: 80, width: 80 }}
+          />
           title={activity.title}
           slotProps={{
             title: {

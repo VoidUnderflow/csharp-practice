@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Activity } from "../types";
+import type { Activity, Profile } from "../types";
 import { agent } from "../api/agent";
 import { useLocation } from "react-router";
 import { useAccount } from "./useAccount";
@@ -20,12 +20,17 @@ export function useActivities(id?: string) {
 
     select: (data) => {
       return data.map((activity) => {
+        const host = activity?.attendees.find(
+          (attendee) => attendee.id === activity.hostId,
+        );
+
         return {
           ...activity,
           isHost: currentUser?.id === activity.hostId,
           isGoing: activity.attendees.some(
             (activityAttendee) => activityAttendee.id === currentUser?.id,
           ),
+          hostImageUrl: host?.imageUrl,
         };
       });
     },
@@ -41,12 +46,17 @@ export function useActivities(id?: string) {
     },
 
     select: (data) => {
+      const host: Profile = activity!.attendees.find(
+        (attendee) => attendee.id === activity!.hostId,
+      )!;
+
       return {
         ...data,
         isHost: currentUser?.id === data.hostId,
         isGoing: data.attendees.some(
           (activityAttendee) => activityAttendee.id === currentUser?.id,
         ),
+        hostImageUrl: host?.imageUrl,
       };
     },
   });
