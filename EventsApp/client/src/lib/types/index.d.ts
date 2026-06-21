@@ -24,6 +24,11 @@ type Profile = {
   imageUrl?: string;
 };
 
+type Photo = {
+  id: string;
+  url: string;
+};
+
 export type User = {
   id: string;
   email: string;
