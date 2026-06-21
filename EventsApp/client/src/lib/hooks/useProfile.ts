@@ -1,14 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { agent } from "../api/agent";
-import { type Photo, type Profile } from "../types";
+import { type Photo, type Profile, type User } from "../types";
+import { useMemo } from "react";
 
 export default function useProfile(id?: string) {
+  const queryClient = useQueryClient();
+
   const { data: profile, isLoading: profileIsLoading } = useQuery<Profile>({
     queryKey: ["profile", id],
     queryFn: async () => {
       const response = await agent.get<Profile>(`/profiles/${id}`);
       return response.data;
     },
+    enabled: !!id,
   });
 
   const { data: photos, isLoading: photosAreLoading } = useQuery<Photo[]>({
@@ -17,12 +21,18 @@ export default function useProfile(id?: string) {
       const response = await agent.get<Photo[]>(`/profiles/${id}/photos`);
       return response.data;
     },
+    enabled: !!id,
   });
+
+  const isCurrentUser = useMemo(() => {
+    return id === queryClient.getQueryData<User>(["user"])?.id;
+  }, [id, queryClient]);
 
   return {
     profile,
     profileIsLoading,
     photos,
     photosAreLoading,
+    isCurrentUser,
   };
 }

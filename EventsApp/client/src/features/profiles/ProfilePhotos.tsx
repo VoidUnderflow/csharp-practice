@@ -1,32 +1,53 @@
 import { useParams } from "react-router";
 import useProfile from "../../lib/hooks/useProfile";
-import { ImageList, ImageListItem, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  ImageList,
+  ImageListItem,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
 
 export default function ProfilePhotos() {
   const { id } = useParams();
-  const { photos, photosAreLoading } = useProfile(id);
+  const { photos, photosAreLoading, isCurrentUser } = useProfile(id);
+  const [editMode, setEditMode] = useState(false);
 
   if (photosAreLoading) return <Typography>Loading photos...</Typography>;
   else if (!photos || photos.length === 0)
     return <Typography>No photos found for this user</Typography>;
 
   return (
-    <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-      {photos.map((photo) => (
-        <ImageListItem key={photo.id}>
-          <img
-            srcSet={`${photo.url.replace(
-              "/upload/",
-              "/upload/w_164,h_164,c_fill,f_auto,dpr_2,g_face",
-            )}`}
-            src={`${photo.url}.replace(
+    <Box>
+      {isCurrentUser && (
+        <Box>
+          <Button onClick={() => setEditMode(!editMode)}>
+            {editMode ? "Cancel" : "Add photo"}
+          </Button>
+        </Box>
+      )}
+      {editMode ? (
+        <div>Photo widget goes here</div>
+      ) : (
+        <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
+          {photos.map((photo) => (
+            <ImageListItem key={photo.id}>
+              <img
+                srcSet={`${photo.url.replace(
+                  "/upload/",
+                  "/upload/w_164,h_164,c_fill,f_auto,dpr_2,g_face",
+                )}`}
+                src={`${photo.url}.replace(
               "/upload/",
               "/upload/w_164,h_164,c_fill,f_auto,g_face",`}
-            alt={"user profile image"}
-            loading="lazy"
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
+                alt={"user profile image"}
+                loading="lazy"
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      )}
+    </Box>
   );
 }
