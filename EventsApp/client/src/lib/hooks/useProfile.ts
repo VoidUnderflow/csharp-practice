@@ -58,6 +58,28 @@ export default function useProfile(id?: string) {
     },
   });
 
+  const setMainPhoto = useMutation({
+    mutationFn: async (photo: Photo) => {
+      await agent.put(`/profiles/${photo.id}/setMain`);
+    },
+    onSuccess: (_, photo) => {
+      queryClient.setQueryData(["user"], (userData: User) => {
+        if (!userData) return userData;
+        return {
+          ...userData,
+          imageUrl: photo.url,
+        };
+      });
+      queryClient.setQueryData(["profile", id], (profile: Profile) => {
+        if (!profile) return profileIsLoading;
+        return {
+          ...profile,
+          imageUrl: photo.url,
+        };
+      });
+    },
+  });
+
   const isCurrentUser = useMemo(() => {
     return id === queryClient.getQueryData<User>(["user"])?.id;
   }, [id, queryClient]);
@@ -69,5 +91,6 @@ export default function useProfile(id?: string) {
     photosAreLoading,
     isCurrentUser,
     uploadPhoto,
+    setMainPhoto,
   };
 }
