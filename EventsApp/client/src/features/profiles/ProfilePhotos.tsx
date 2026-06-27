@@ -49,11 +49,12 @@ export default function ProfilePhotos() {
               <img
                 srcSet={`${photo.url.replace(
                   "/upload/",
-                  "/upload/w_164,h_164,c_fill,f_auto,dpr_2,g_face",
+                  "/upload/w_164,h_164,c_fill,f_auto,dpr_2,g_face/",
                 )}`}
-                src={`${photo.url}.replace(
-              "/upload/",
-              "/upload/w_164,h_164,c_fill,f_auto,g_face",`}
+                src={`${photo.url.replace(
+                  "/upload/",
+                  "/upload/w_164,h_164,c_fill,f_auto,g_face/",
+                )}`}
                 alt={"user profile image"}
                 loading="lazy"
               />
