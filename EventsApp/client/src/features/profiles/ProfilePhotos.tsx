@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import PhotoUploadWidget from "../../app/shared/components/PhotoUploadWidget";
 
 export default function ProfilePhotos() {
   const { id } = useParams();
@@ -28,7 +29,7 @@ export default function ProfilePhotos() {
         </Box>
       )}
       {editMode ? (
-        <div>Photo widget goes here</div>
+        <PhotoUploadWidget />
       ) : (
         <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
           {photos.map((photo) => (
