@@ -90,7 +90,7 @@ export default function PhotoUploadWidget({
               style={{ width: 300, height: 300, overflow: "hidden" }}
             />
             <Button
-              sx={{ mt: 2 }}
+              sx={{ my: 1, width: 300 }}
               onClick={onCrop}
               variant="contained"
               color="secondary"
