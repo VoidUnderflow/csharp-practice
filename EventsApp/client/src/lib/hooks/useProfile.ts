@@ -71,7 +71,7 @@ export default function useProfile(id?: string) {
         };
       });
       queryClient.setQueryData(["profile", id], (profile: Profile) => {
-        if (!profile) return profileIsLoading;
+        if (!profile) return profile;
         return {
           ...profile,
           imageUrl: photo.url,
