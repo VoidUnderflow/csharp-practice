@@ -6,6 +6,7 @@ import {
 } from "@microsoft/signalr";
 import { useEffect, useRef } from "react";
 import type { ChatComment } from "../types";
+import { runInAction } from "mobx";
 
 export default function useComments(activityId?: string) {
   // Workaround strict mode creating two connections.
@@ -32,11 +33,15 @@ export default function useComments(activityId?: string) {
         );
 
       this.hubConnection.on("LoadComments", (comments) => {
-        this.comments = comments;
+        runInAction(() => {
+          this.comments = comments;
+        });
       });
 
       this.hubConnection.on("ReceiveComment", (comment) => {
-        this.comments.unshift(comment);
+        runInAction(() => {
+          this.comments.unshift(comment);
+        });
       });
     },
 
