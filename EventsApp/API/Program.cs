@@ -1,4 +1,5 @@
 using API.Middleware;
+using API.SignalR;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
 using Application.Core;
@@ -26,6 +27,9 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
   opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();
+
+// SignalR for comments.
+builder.Services.AddSignalR();
 
 // Since mediator is injected into the ActivitiesController => need to add it as a service here.
 builder.Services.AddMediatR(x =>
@@ -83,6 +87,9 @@ app.UseCors(options =>
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapGroup("api").MapIdentityApi<User>();
+
+// Registering route redirection for SignalR.
+app.MapHub<CommentHub>("/comments");
 
 // Configure the HTTP request pipeline.
 app.MapControllers();
