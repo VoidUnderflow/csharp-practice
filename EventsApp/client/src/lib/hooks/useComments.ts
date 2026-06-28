@@ -20,7 +20,7 @@ export default function useComments(activityId?: string) {
       if (!activityId) return;
 
       this.hubConnection = new HubConnectionBuilder()
-        .withUrl(`${import.meta.env.VITE_COMMENT_URL}?=${activityId}`, {
+        .withUrl(`${import.meta.env.VITE_COMMENT_URL}?activityId=${activityId}`, {
           withCredentials: true,
         })
         .withAutomaticReconnect()
