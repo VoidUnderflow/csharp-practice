@@ -15,4 +15,7 @@ public class Activity
 
     // n-to-n
     public ICollection<ActivityAttendee> Attendees { get; set; } = [];
+
+    // 1-to-n
+    public ICollection<Comment> Comments { get; set; } = [];
 }
