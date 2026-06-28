@@ -12,5 +12,12 @@ public class User : IdentityUser
     // n-to-n
     public ICollection<ActivityAttendee> Activities { get; set; } = [];
 
+    // 1-to-n
     public ICollection<Photo> Photos { get; set; } = [];
+
+    // 1-to-n
+    public ICollection<UserFollowing> Followings { get; set; } = [];
+
+    // 1-to-n
+    public ICollection<UserFollowing> Followers { get; set; } = [];
 }

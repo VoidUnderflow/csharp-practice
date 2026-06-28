@@ -13,6 +13,7 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
   public required DbSet<ActivityAttendee> ActivityAttendees { get; set; }
   public required DbSet<Photo> Photos { get; set; }
   public required DbSet<Comment> Comments { get; set; }
+  public required DbSet<UserFollowing> UserFollowings { get; set; }
 
   protected override void OnModelCreating(ModelBuilder builder)
   {
@@ -29,6 +30,25 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
       .WithMany(activity => activity.Attendees)
       .HasForeignKey(activityAttendee => activityAttendee.ActivityId);
 
+    // Model followers.
+    builder.Entity<UserFollowing>(etBuilder =>
+    {
+      // Composite key.
+      etBuilder.HasKey(userFollowing => new { userFollowing.ObserverId, userFollowing.TargetId });
+
+      // Relationships.
+      etBuilder.HasOne(userFollowing => userFollowing.Observer)
+        .WithMany(follower => follower.Followings)
+        .HasForeignKey(follower => follower.ObserverId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+      etBuilder.HasOne(userFollowing => userFollowing.Target)
+        .WithMany(follower => follower.Followers)
+        .HasForeignKey(follower => follower.TargetId)
+        .OnDelete(DeleteBehavior.Cascade);
+    });
+
+    // Convert date-times going in and out of the DB to UTC.
     var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
       dt => dt.ToUniversalTime(),
       dt => DateTime.SpecifyKind(dt, DateTimeKind.Utc)
