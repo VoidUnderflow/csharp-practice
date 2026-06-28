@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Activity, Profile } from "../types";
+import type { Activity } from "../types";
 import { agent } from "../api/agent";
 import { useLocation } from "react-router";
 import { useAccount } from "./useAccount";
@@ -46,9 +46,9 @@ export function useActivities(id?: string) {
     },
 
     select: (data) => {
-      const host: Profile = activity!.attendees.find(
-        (attendee) => attendee.id === activity!.hostId,
-      )!;
+      const host = data.attendees.find(
+        (attendee) => attendee.id === data.hostId,
+      );
 
       return {
         ...data,
