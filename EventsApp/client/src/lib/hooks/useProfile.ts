@@ -4,7 +4,7 @@ import { type Photo, type Profile, type User } from "../types";
 import { useMemo } from "react";
 import { type EditProfileSchema } from "../schemas/editProfileSchema";
 
-export default function useProfile(id?: string) {
+export default function useProfile(id?: string, predicate?: string) {
   const queryClient = useQueryClient();
 
   const { data: profile, isLoading: profileIsLoading } = useQuery<Profile>({
@@ -13,7 +13,7 @@ export default function useProfile(id?: string) {
       const response = await agent.get<Profile>(`/profiles/${id}`);
       return response.data;
     },
-    enabled: !!id,
+    enabled: !!id && !predicate,
   });
 
   const { data: photos, isLoading: photosAreLoading } = useQuery<Photo[]>({
@@ -22,7 +22,21 @@ export default function useProfile(id?: string) {
       const response = await agent.get<Photo[]>(`/profiles/${id}/photos`);
       return response.data;
     },
-    enabled: !!id,
+    enabled: !!id && !predicate,
+  });
+
+  const { data: followings, isLoading: loadingFollowings } = useQuery<
+    Profile[]
+  >({
+    queryKey: ["followings", id, predicate],
+    queryFn: async () => {
+      const response = await agent.get<Profile[]>(
+        `/profiles/${id}/follow-list?predicate=${predicate}`,
+      );
+
+      return response.data;
+    },
+    enabled: !!id && !!predicate,
   });
 
   const uploadPhoto = useMutation({
@@ -121,11 +135,14 @@ export default function useProfile(id?: string) {
       await agent.post(`/profiles/${id}/follow`);
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["followings", id, "followers"],
+      });
       queryClient.setQueryData(["profile", id], (profile: Profile) => {
         if (!profile || profile.followersCount === undefined) return profile;
         return {
           ...profile,
-          following: !profile.isFollowedByCurrentUser,
+          isFollowedByCurrentUser: !profile.isFollowedByCurrentUser,
           followersCount: profile.isFollowedByCurrentUser
             ? profile.followersCount - 1
             : profile.followersCount + 1,
@@ -149,5 +166,7 @@ export default function useProfile(id?: string) {
     deletePhoto,
     editProfile,
     updateFollowing,
+    followings,
+    loadingFollowings,
   };
 }
