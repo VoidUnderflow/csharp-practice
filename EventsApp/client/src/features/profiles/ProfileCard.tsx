@@ -16,9 +16,6 @@ type ProfileCardProps = {
 };
 
 export default function ProfileCard({ profile }: ProfileCardProps) {
-  // TODO: Replace placeholder followers-related stuff.
-  const following = false;
-
   return (
     <Link to={`/profiles/${profile.id}`} style={{ textDecoration: "none" }}>
       <Card
@@ -46,7 +43,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
                 {profile.bio}
               </Typography>
             )}
-            {following && (
+            {profile.isFollowedByCurrentUser && (
               <Chip
                 size="small"
                 label="Following"
@@ -65,7 +62,9 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
           }}
         >
           <Person />
-          <Typography sx={{ ml: 1 }}>20 Followers</Typography>
+          <Typography sx={{ ml: 1 }}>
+            {profile.followersCount} Followers
+          </Typography>
         </Box>
       </Card>
     </Link>

@@ -31,6 +31,10 @@ export default function AvatarPopover({ profile }: AvatarPopoverProps) {
         to={`/profiles/${profile.id}`}
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
+        sx={{
+          border: profile.isFollowedByCurrentUser ? 3 : 0,
+          borderColor: "secondary.main",
+        }}
       />
       <Popover
         id="mouse-over-popover"
