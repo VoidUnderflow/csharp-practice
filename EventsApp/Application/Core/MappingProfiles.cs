@@ -9,6 +9,8 @@ public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
+        string? currentUserId = null;
+
         CreateMap<Activity, Activity>();
         CreateMap<CreateActivityDto, Activity>();
         CreateMap<EditActivityDto, Activity>();
@@ -31,9 +33,25 @@ public class MappingProfiles : Profile
             .ForMember(userProfile => userProfile.DisplayName, memberOptions => memberOptions.MapFrom(activityAttendee => activityAttendee.User.DisplayName))
             .ForMember(userProfile => userProfile.Bio, memberOptions => memberOptions.MapFrom(activityAttendee => activityAttendee.User.Bio))
             .ForMember(userProfile => userProfile.ImageUrl, memberOptions => memberOptions.MapFrom(activityAttendee => activityAttendee.User.ImageUrl))
-            .ForMember(userProfile => userProfile.Id, memberOptions => memberOptions.MapFrom(activityAttendee => activityAttendee.User.Id));
+            .ForMember(userProfile => userProfile.Id, memberOptions => memberOptions.MapFrom(activityAttendee => activityAttendee.User.Id))
+            .ForMember(userProfile => userProfile.FollowersCount,
+                       config => config.MapFrom(activityAttendee => activityAttendee.User.Followers.Count))
+            .ForMember(userProfile => userProfile.FollowingCount,
+                       config => config.MapFrom(activityAttendee => activityAttendee.User.Followings.Count))
+            .ForMember(userProfile => userProfile.IsFollowedByCurrentUser,
+                       config => config.MapFrom(activityAttendee =>
+                                    activityAttendee.User.Followers.Any(
+                                        follower => follower.Observer.Id == currentUserId
+            )));
 
-        CreateMap<User, UserProfile>();
+        CreateMap<User, UserProfile>()
+            .ForMember(userProfile => userProfile.FollowersCount,
+                       config => config.MapFrom(user => user.Followers.Count))
+            .ForMember(userProfile => userProfile.FollowingCount,
+                       config => config.MapFrom(user => user.Followings.Count))
+            .ForMember(userProfile => userProfile.IsFollowedByCurrentUser,
+                       config => config.MapFrom(user => user.Followers.Any(follower => follower.Observer.Id == currentUserId)));
+
         CreateMap<Comment, CommentDto>()
             .ForMember(commentDto => commentDto.DisplayName, memberOptions => memberOptions.MapFrom(comment => comment.User.DisplayName))
             .ForMember(commentDto => commentDto.UserId, memberOptions => memberOptions.MapFrom(comment => comment.User.Id))
