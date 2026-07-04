@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { agent } from "../api/agent";
-import { type Photo, type Profile, type User } from "../types";
-import { useMemo } from "react";
+import { type Activity, type Photo, type Profile, type User } from "../types";
+import { useMemo, useState } from "react";
 import { type EditProfileSchema } from "../schemas/editProfileSchema";
 
 export default function useProfile(id?: string, predicate?: string) {
+  const [filter, setFilter] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const { data: profile, isLoading: profileIsLoading } = useQuery<Profile>({
@@ -38,6 +39,24 @@ export default function useProfile(id?: string, predicate?: string) {
     },
     enabled: !!id && !!predicate,
   });
+
+  const { data: userActivities, isLoading: isLoadingUserActivities } = useQuery(
+    {
+      queryKey: ["user-activities", filter],
+      queryFn: async () => {
+        const response = await agent.get<Activity[]>(
+          `/profiles/${id}/activities`,
+          {
+            params: {
+              filter,
+            },
+          },
+        );
+        return response.data;
+      },
+      enabled: !!id && !!filter,
+    },
+  );
 
   const uploadPhoto = useMutation({
     mutationFn: async (file: Blob) => {
@@ -168,5 +187,9 @@ export default function useProfile(id?: string, predicate?: string) {
     updateFollowing,
     followings,
     loadingFollowings,
+    userActivities,
+    isLoadingUserActivities,
+    filter,
+    setFilter,
   };
 }

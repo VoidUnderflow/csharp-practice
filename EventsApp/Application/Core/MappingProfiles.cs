@@ -56,5 +56,7 @@ public class MappingProfiles : Profile
             .ForMember(commentDto => commentDto.DisplayName, memberOptions => memberOptions.MapFrom(comment => comment.User.DisplayName))
             .ForMember(commentDto => commentDto.UserId, memberOptions => memberOptions.MapFrom(comment => comment.User.Id))
             .ForMember(commentDto => commentDto.ImageUrl, memberOptions => memberOptions.MapFrom(comment => comment.User.ImageUrl));
+
+        CreateMap<Activity, UserActivityDto>();
     }
 }
