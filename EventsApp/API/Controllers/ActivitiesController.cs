@@ -11,10 +11,11 @@ namespace API.Controllers;
 public class ActivitiesController() : BaseApiController
 {
   [HttpGet]
-  public async Task<ActionResult<PagedList<ActivityDto, DateTime?>>> GetActivities(DateTime? cursor)
+  public async Task<ActionResult<PagedList<ActivityDto, DateTime?>>> GetActivities(
+    [FromQuery] ActivityParams activityParams)
   {
     // Decouples the controller from the logic that fetches the activities.
-    return HandleResult(await Mediator.Send(new GetActivityList.Query { Cursor = cursor }));
+    return HandleResult(await Mediator.Send(new GetActivityList.Query { Params = activityParams }));
   }
 
   [HttpGet("{id}")]
