@@ -20,10 +20,7 @@ export default function NavBar() {
 
   return (
     <Box>
-      <AppBar
-        position="static"
-        sx={{ backgroundColor: "#4527a0", position: "relative" }}
-      >
+      <AppBar position="fixed" sx={{ backgroundColor: "#4527a0" }}>
         <Container maxWidth="xl">
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
