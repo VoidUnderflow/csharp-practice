@@ -36,6 +36,7 @@ export function useActivities(id?: string) {
       );
       return response.data;
     },
+    staleTime: 1000 * 60 * 5,
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     select: (data) => ({
