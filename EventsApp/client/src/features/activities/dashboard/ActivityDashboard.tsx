@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
-import { ActivityList } from "./ActivityList";
 import ActivityFilters from "./ActivityFilters";
+import ActivityList from "./ActivityList";
 
 export function ActivityDashboard() {
   return (

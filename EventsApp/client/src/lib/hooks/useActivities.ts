@@ -3,13 +3,18 @@ import {
   useQuery,
   useInfiniteQuery,
   useQueryClient,
+  keepPreviousData,
 } from "@tanstack/react-query";
 import type { Activity, PagedList } from "../types";
 import { agent } from "../api/agent";
 import { useLocation } from "react-router";
 import { useAccount } from "./useAccount";
+import { useStore } from "./useStore";
 
 export function useActivities(id?: string) {
+  const {
+    activityStore: { filter, startDate },
+  } = useStore();
   const queryClient = useQueryClient();
   const { currentUser } = useAccount();
   const location = useLocation();
@@ -21,7 +26,7 @@ export function useActivities(id?: string) {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery<PagedList<Activity, string>>({
-    queryKey: ["activities"],
+    queryKey: ["activities", filter, startDate],
     enabled: !id && location.pathname === "/activities" && !!currentUser,
 
     queryFn: async ({ pageParam = null }) => {
@@ -31,12 +36,15 @@ export function useActivities(id?: string) {
           params: {
             cursor: pageParam,
             pageSize: 3,
+            filter,
+            startDate,
           },
         },
       );
       return response.data;
     },
     staleTime: 1000 * 60 * 5,
+    placeholderData: keepPreviousData,
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     select: (data) => ({
