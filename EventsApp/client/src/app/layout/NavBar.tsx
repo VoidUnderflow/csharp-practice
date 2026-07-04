@@ -1,8 +1,8 @@
 import {
   AppBar,
   Box,
+  CircularProgress,
   Container,
-  LinearProgress,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -26,9 +26,29 @@ export default function NavBar() {
             <Box>
               <MenuItemLink to="/">
                 <Group fontSize="large" />
-                <Typography variant="h4" fontWeight="bold">
+                <Typography
+                  variant="h4"
+                  fontWeight="bold"
+                  sx={{ position: "relative" }}
+                >
                   Activities app
                 </Typography>
+                <Observer>
+                  {() =>
+                    uiStore.isLoading ? (
+                      <CircularProgress
+                        size={20}
+                        thickness={7}
+                        sx={{
+                          color: "white",
+                          position: "absolute",
+                          top: "30%",
+                          left: "105%",
+                        }}
+                      />
+                    ) : null
+                  }
+                </Observer>
               </MenuItemLink>
             </Box>
             <Box sx={{ display: "flex" }}>
@@ -48,23 +68,6 @@ export default function NavBar() {
             </Box>
           </Toolbar>
         </Container>
-
-        <Observer>
-          {() =>
-            uiStore.isLoading ? (
-              <LinearProgress
-                color="secondary"
-                sx={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: 4,
-                }}
-              />
-            ) : null
-          }
-        </Observer>
       </AppBar>
     </Box>
   );
