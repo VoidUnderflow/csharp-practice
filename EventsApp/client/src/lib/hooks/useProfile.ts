@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { agent } from "../api/agent";
-import { type Activity, type Photo, type Profile, type User } from "../types";
+import type { Activity, Photo, Profile, User } from "../types";
 import { useMemo, useState } from "react";
 import { type EditProfileSchema } from "../schemas/editProfileSchema";
 

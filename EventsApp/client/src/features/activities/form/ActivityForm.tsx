@@ -15,12 +15,7 @@ import DateTimeInput from "../../../app/shared/components/DateTimeInput";
 import LocationInput from "../../../app/shared/components/LocationInput";
 
 export default function ActivityForm() {
-  const {
-    reset,
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useForm<ActivitySchema>({
+  const { reset, handleSubmit, control } = useForm<ActivitySchema>({
     mode: "onTouched",
     resolver: zodResolver(activitySchema),
   });
