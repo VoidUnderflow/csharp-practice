@@ -3,7 +3,8 @@ import { store } from "../stores/store";
 import { toast } from "react-toastify";
 import { router } from "../../app/routes/Routes";
 
-// Introduces an artificial delay when fetching things, for illustrative purposes.
+// Introduces an artificial delay when fetching things in dev mode,
+// for illustrative purposes.
 
 function sleep(delay: number) {
   return new Promise((resolve) => setTimeout(resolve, delay));
@@ -21,15 +22,13 @@ agent.interceptors.response.use((config) => {
 
 agent.interceptors.response.use(
   async (response) => {
-    // The delay mentioned above.
-    await sleep(1000);
-
+    if (import.meta.env.DEV) await sleep(1000);
     store.uiStore.isIdle();
     return response;
   },
 
   async (error) => {
-    await sleep(1000);
+    if (import.meta.env.DEV) await sleep(1000);
 
     store.uiStore.isIdle();
 
