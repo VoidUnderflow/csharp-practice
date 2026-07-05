@@ -138,3 +138,6 @@ reactivities.db*
 
 # contains Cloudinary key
 appsettings.json
+
+# build target
+API/wwwroot
