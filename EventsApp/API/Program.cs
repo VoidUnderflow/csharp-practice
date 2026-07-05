@@ -86,10 +86,18 @@ app.UseCors(options =>
   .WithOrigins("http://localhost:5173", "https://localhost:5173"));
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Make .NET server also serve the client.
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapGroup("api").MapIdentityApi<User>();
 
 // Registering route redirection for SignalR.
 app.MapHub<CommentHub>("/comments");
+
+// Client redirection.
+app.MapFallbackToController("Index", "Fallback");
 
 // Configure the HTTP request pipeline.
 app.MapControllers();
