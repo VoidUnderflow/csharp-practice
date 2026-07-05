@@ -45,7 +45,7 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
       etBuilder.HasOne(userFollowing => userFollowing.Target)
         .WithMany(follower => follower.Followers)
         .HasForeignKey(follower => follower.TargetId)
-        .OnDelete(DeleteBehavior.Cascade);
+        .OnDelete(DeleteBehavior.NoAction);
     });
 
     // Convert date-times going in and out of the DB to UTC.
