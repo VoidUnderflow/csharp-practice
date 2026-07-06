@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Resend;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,14 @@ builder.Services.AddMediatR(x =>
   x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>();
   x.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
+
+// Register email client.
+builder.Services.AddHttpClient<ResendClient>();
+builder.Services.Configure<ResendClientOptions>(opt =>
+{
+  opt.ApiToken = builder.Configuration["Resend:ApiToken"]!;
+});
+builder.Services.AddTransient<IResend, ResendClient>();
 
 // Interface Application uses to access Users
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
