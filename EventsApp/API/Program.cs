@@ -66,6 +66,7 @@ builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddIdentityApiEndpoints<User>(opt =>
 {
   opt.User.RequireUniqueEmail = true;
+  opt.SignIn.RequireConfirmedEmail = true;
 
 })
 .AddRoles<IdentityRole>()
