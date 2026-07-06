@@ -6,6 +6,7 @@ using Application.Core;
 using Application.Interfaces;
 using Domain;
 using FluentValidation;
+using Infrastructure.Email;
 using Infrastructure.Photos;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +47,7 @@ builder.Services.Configure<ResendClientOptions>(opt =>
   opt.ApiToken = builder.Configuration["Resend:ApiToken"]!;
 });
 builder.Services.AddTransient<IResend, ResendClient>();
+builder.Services.AddTransient<IEmailSender<User>, EmailSender>();
 
 // Interface Application uses to access Users
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
