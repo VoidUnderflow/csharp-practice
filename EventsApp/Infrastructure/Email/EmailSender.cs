@@ -35,8 +35,7 @@ public class EmailSender(IServiceScopeFactory scopeFactory) : IEmailSender<User>
         message.To.Add(email);
         Console.WriteLine(message.HtmlBody);
 
-        // await resend.EmailSendAsync(message);
-        await Task.CompletedTask;
+        await resend.EmailSendAsync(message);
     }
 
     public Task SendPasswordResetCodeAsync(User user, string email, string resetCode)
