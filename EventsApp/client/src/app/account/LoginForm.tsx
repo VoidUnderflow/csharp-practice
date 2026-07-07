@@ -26,7 +26,7 @@ export default function LoginForm() {
 
   const handleResendEmail = async () => {
     try {
-      await resendConfirmationEmail.mutateAsync(email);
+      await resendConfirmationEmail.mutateAsync({ email });
       setNotVerified(false);
     } catch (error) {
       toast.error("Problem sending email - please check email address.");
