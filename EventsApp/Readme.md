@@ -6,8 +6,10 @@ Frontend:
 - MUI;
 - React Query;
 - Axios;
+- LocationIQ for displaying event locations;
 
 Backend:
 
 - C#;
-- sqlite;
+- Microsoft SQL Server + Docker;
+- Resend for sending auth-related emails;
